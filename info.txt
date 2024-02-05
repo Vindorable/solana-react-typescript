@@ -5,6 +5,7 @@ https://www.youtube.com/watch?v=RSH2SXU2J7A
  "npm install"
  "npm run dev"
 
- "npm install @solana/spl-token" // To mint token/nft.
- "npm install @solana/web3.js"   // To communicate with Solana servers.
- "buffer"                        // Data encoding library.
+ "npm install @solana/spl-token"        // To mint token/nft.
+ "npm install @solana/web3.js"          // To communicate with Solana servers.
+ "npm install buffer"                   // Data encoding library.
+ "npm i -D vite-plugin-node-polyfills"  // "buffer" above don't work for vite.. https://stackoverflow.com/a/77153849/6698249
