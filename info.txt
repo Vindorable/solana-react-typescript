@@ -1,3 +1,4 @@
+https://www.youtube.com/watch?v=RSH2SXU2J7A
  "npm create vite@latest"
   > react
   > typescript
