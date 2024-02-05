@@ -3,3 +3,7 @@
   > typescript
  "npm install"
  "npm run dev"
+
+ "npm install @solana/spl-token" // To mint token/nft.
+ "npm install @solana/web3.js"   // To communicate with Solana servers.
+ "buffer"                        // Data encoding library.
