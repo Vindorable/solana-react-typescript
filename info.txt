@@ -1,0 +1,5 @@
+ "npm create vite@latest"
+  > react
+  > typescript
+ "npm install"
+ "npm run dev"
