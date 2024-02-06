@@ -9,3 +9,6 @@ https://www.youtube.com/watch?v=RSH2SXU2J7A
  "npm install @solana/web3.js"          // To communicate with Solana servers.
  "npm install buffer"                   // Data encoding library.
  "npm i -D vite-plugin-node-polyfills"  // "buffer" above don't work for vite.. https://stackoverflow.com/a/77153849/6698249
+
+
+https://academy.patika.dev/courses/introduction-to-solana-part-2/The-Token-Program
