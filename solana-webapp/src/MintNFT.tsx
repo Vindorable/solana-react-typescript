@@ -3,16 +3,17 @@ import {
   Connection,
   PublicKey,
   Keypair,
-  LAMPORTS_PER_SOL
+  LAMPORTS_PER_SOL,
+  Transaction,
+  sendAndConfirmTransaction
 } from "@solana/web3.js";
 import {
   createMint,
   getOrCreateAssociatedTokenAccount,
   mintTo,
-  transfer,
   Account,
-  getMint,
-  getAccount
+  createSetAuthorityInstruction,
+  AuthorityType
 } from "@solana/spl-token";
 
 // When minting token/nft it calls the buffer object.
@@ -67,6 +68,20 @@ function MintNFT() {
       1
     );
     console.log(`Mint Signature: ${signature}`);
+  }
+
+  async function lockNFT() {
+    // Create our transaction to change minting permissions.
+    let transaction = new Transaction().add(createSetAuthorityInstruction(
+      mint,
+      fromWallet.publicKey,
+      AuthorityType.MintTokens,
+      null
+    ));
+
+    // Send transaction.
+    const signature = await sendAndConfirmTransaction(connection, transaction, [fromWallet]);
+    console.log(`Lock Signature: ${signature}`);
   }
 
   return (
