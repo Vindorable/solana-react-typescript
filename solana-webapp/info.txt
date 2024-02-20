@@ -10,5 +10,11 @@ https://www.youtube.com/watch?v=RSH2SXU2J7A
  "npm install buffer"                   // Data encoding library.
  "npm i -D vite-plugin-node-polyfills"  // "buffer" above don't work for vite.. https://stackoverflow.com/a/77153849/6698249
 
+ // https://www.0xdev.co/how-to-connect-to-a-solana-wallet-to-your-react-app/
+ "npm install @solana/wallet-adapter-base"
+ "npm install @solana/wallet-adapter-react"
+ "npm install @solana/wallet-adapter-react-ui"
+ "npm install @solana/wallet-adapter-wallets"
+
 
 https://academy.patika.dev/courses/introduction-to-solana-part-2/The-Token-Program

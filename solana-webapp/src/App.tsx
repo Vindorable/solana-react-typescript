@@ -2,13 +2,16 @@ import "./App.css";
 
 import MintToken from "./MintToken";
 import MintNFT from "./MintNFT";
+import WalletConnect from "./WalletConnect";
 
 
 function App() {
   return (
     <>
-      <MintToken />
-      <MintNFT />
+      <WalletConnect>
+        <MintToken />
+        <MintNFT />
+      </WalletConnect>
     </>
   )
 }
