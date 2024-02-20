@@ -50,4 +50,4 @@ const WalletConnect = ({ children }: Props): React.ReactNode => {
 
 // ---------------------------------------------------------
 
-export default WalletConnect
+export default WalletConnect;
