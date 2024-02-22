@@ -4,6 +4,7 @@ import WalletConnect from "./WalletConnect";
 import WalletInfo from "./WalletInfo";
 import MintToken from "./MintToken";
 import MintNFT from "./MintNFT";
+import MintToken2 from "./MintToken2";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <WalletInfo />
         <MintToken />
         <MintNFT />
+        <MintToken2 />
       </WalletConnect>
     </>
   )
