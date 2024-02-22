@@ -17,6 +17,7 @@ import {
 } from "@solana/spl-token";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { SignerWalletAdapterProps, WalletNotConnectedError } from "@solana/wallet-adapter-base";
+import { createCreateMetadataAccountV3Instruction, PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 
 
 // ---------------------------------------------------------
@@ -26,6 +27,7 @@ import { SignerWalletAdapterProps, WalletNotConnectedError } from "@solana/walle
 //  > https://stackoverflow.com/questions/73324192/transaction-with-systemprogram-createaccount-results-in-error-signature-veri
 //  > https://stackoverflow.com/questions/70224185/how-to-transfer-custom-spl-token-by-solana-web3-js-and-solana-sol-wallet-ad/
 //  > https://solana.stackexchange.com/questions/1202/spl-token-solana-create-token-account-with-wallet-adapter-react-js
+//  > https://solana.stackexchange.com/questions/6712/hi-i-want-add-metadata-to-my-solana-token
 
 
 // ---------------------------------------------------------
@@ -179,6 +181,74 @@ function MintToken2() {
 
   }
 
+  // ----------
+  // ----------
+  async function setTokenMetadata() {
+    try {
+      if (!wallet.publicKey || !wallet.signTransaction) { throw new WalletNotConnectedError(); }
+
+      const mintingTokenPubKey = mintPubKey == "" ? mint.publicKey : new PublicKey(mintPubKey);
+      console.log(`Mint public key: ${mintingTokenPubKey.toBase58()}`);
+
+      // Add the Token Metadata Program.
+      const token_metadata_program_id = new PublicKey(TOKEN_METADATA_PROGRAM_ID);
+
+      // Create PDA for token metadata.
+      const metadata_seeds = [
+        Buffer.from('metadata'),
+        token_metadata_program_id.toBuffer(),
+        mintingTokenPubKey.toBuffer(),
+      ];
+      const [metadata_pda, _bump] = PublicKey.findProgramAddressSync(metadata_seeds, token_metadata_program_id);
+
+      const transactionInstructions: TransactionInstruction[] = [];
+
+      // Set token metadata.
+      transactionInstructions.push(
+        createCreateMetadataAccountV3Instruction(
+          {
+            metadata: metadata_pda,
+            mint: mintingTokenPubKey,
+            mintAuthority: wallet.publicKey,
+            payer: wallet.publicKey,
+            updateAuthority: wallet.publicKey,
+            systemProgram: SystemProgram.programId,
+          },
+          {
+            createMetadataAccountArgsV3:
+            {
+              data: {
+                name: "SuperKen",
+                symbol: "SPKN",
+                uri: "",
+                sellerFeeBasisPoints: 0,
+                creators: null,
+                collection: null,
+                uses: null
+              },
+              isMutable: true,
+              collectionDetails: null
+            }
+          }
+        )
+      );
+
+      const transaction = new Transaction().add(...transactionInstructions);
+
+      const signature = await configureAndSendCurrentTransaction(
+        transaction,
+        connection,
+        wallet.publicKey,
+        null,
+        wallet.signTransaction
+      );
+      console.log(`Transaction signature: ${signature}`);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div>
@@ -188,6 +258,7 @@ function MintToken2() {
           <button onClick={mintToken}>Mint Token</button>
           <button onClick={checkBalance}>Check Balance</button>
           <button onClick={sendToken}>Send Token</button>
+          <button onClick={setTokenMetadata}>Set Token Metadata</button>
         </div>
       </div>
     </>
