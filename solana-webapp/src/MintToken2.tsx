@@ -290,7 +290,7 @@ function MintToken2() {
               data: {
                 name: "XXX",
                 symbol: "X3",
-                uri: "",
+                uri: "https://raw.githubusercontent.com/Vindorable/solana-react-typescript/main/solana-webapp/public/token_metadata.json",
                 sellerFeeBasisPoints: 0,
                 creators: null,
                 collection: null,
