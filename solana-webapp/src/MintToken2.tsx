@@ -17,7 +17,11 @@ import {
 } from "@solana/spl-token";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { SignerWalletAdapterProps, WalletNotConnectedError } from "@solana/wallet-adapter-base";
-import { createCreateMetadataAccountV3Instruction, PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
+import {
+  createCreateMetadataAccountV3Instruction,
+  createUpdateMetadataAccountV2Instruction,
+  PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID
+} from "@metaplex-foundation/mpl-token-metadata";
 
 
 // ---------------------------------------------------------
@@ -28,6 +32,7 @@ import { createCreateMetadataAccountV3Instruction, PROGRAM_ID as TOKEN_METADATA_
 //  > https://stackoverflow.com/questions/70224185/how-to-transfer-custom-spl-token-by-solana-web3-js-and-solana-sol-wallet-ad/
 //  > https://solana.stackexchange.com/questions/1202/spl-token-solana-create-token-account-with-wallet-adapter-react-js
 //  > https://solana.stackexchange.com/questions/6712/hi-i-want-add-metadata-to-my-solana-token
+//  > https://stackoverflow.com/questions/69956957/update-metadata-of-metaplex-nft
 
 
 // ---------------------------------------------------------
@@ -249,6 +254,72 @@ function MintToken2() {
     }
   }
 
+  // ----------
+  // ----------
+  async function updateTokenMetadata() {
+    try {
+      if (!wallet.publicKey || !wallet.signTransaction) { throw new WalletNotConnectedError(); }
+
+      const mintingTokenPubKey = mintPubKey == "" ? mint.publicKey : new PublicKey(mintPubKey);
+      console.log(`Mint public key: ${mintingTokenPubKey.toBase58()}`);
+
+      // Add the Token Metadata Program.
+      const token_metadata_program_id = new PublicKey(TOKEN_METADATA_PROGRAM_ID);
+
+      // Get PDA for token metadata.
+      const [metadata_key] = await PublicKey.findProgramAddressSync([
+        Buffer.from('metadata'),
+        token_metadata_program_id.toBuffer(),
+        mintingTokenPubKey.toBuffer(),
+      ],
+        TOKEN_METADATA_PROGRAM_ID
+      );
+
+      const transactionInstructions: TransactionInstruction[] = [];
+
+      // Update token metadata.
+      transactionInstructions.push(
+        createUpdateMetadataAccountV2Instruction(
+          {
+            metadata: metadata_key,
+            updateAuthority: wallet.publicKey,
+          },
+          {
+            updateMetadataAccountArgsV2:
+            {
+              data: {
+                name: "XXX",
+                symbol: "X3",
+                uri: "",
+                sellerFeeBasisPoints: 0,
+                creators: null,
+                collection: null,
+                uses: null
+              },
+              updateAuthority: wallet.publicKey,
+              primarySaleHappened: true,
+              isMutable: true,
+            }
+          }
+        )
+      );
+
+      const transaction = new Transaction().add(...transactionInstructions);
+
+      const signature = await configureAndSendCurrentTransaction(
+        transaction,
+        connection,
+        wallet.publicKey,
+        null,
+        wallet.signTransaction
+      );
+      console.log(`Transaction signature: ${signature}`);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div>
@@ -259,6 +330,7 @@ function MintToken2() {
           <button onClick={checkBalance}>Check Balance</button>
           <button onClick={sendToken}>Send Token</button>
           <button onClick={setTokenMetadata}>Set Token Metadata</button>
+          <button onClick={updateTokenMetadata}>Update Token Metadata</button>
         </div>
       </div>
     </>
