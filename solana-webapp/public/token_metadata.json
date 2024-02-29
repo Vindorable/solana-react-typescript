@@ -1,0 +1,6 @@
+{
+  "name": "Test Coin",
+  "symbol": "TEST",
+  "description": "Fully reserved shitcoin created by Jay.",
+  "image": "https://raw.githubusercontent.com/Vindorable/solana-react-typescript/main/solana-webapp/public/charmander.jpg"
+}
