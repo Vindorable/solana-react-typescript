@@ -16,6 +16,7 @@ https://www.youtube.com/watch?v=RSH2SXU2J7A
  "npm install @solana/wallet-adapter-react-ui"
  "npm install @solana/wallet-adapter-wallets"
 
+ https://github.com/256hax/solana-arweave-react-mint-nft-example
  "npm install arweave"
 
  "npm install @mui/material @emotion/react @emotion/styled"
