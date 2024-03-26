@@ -16,5 +16,9 @@ https://www.youtube.com/watch?v=RSH2SXU2J7A
  "npm install @solana/wallet-adapter-react-ui"
  "npm install @solana/wallet-adapter-wallets"
 
+ "npm install arweave"
+
+ "npm install @mui/material @emotion/react @emotion/styled"
+
 
 https://academy.patika.dev/courses/introduction-to-solana-part-2/The-Token-Program
