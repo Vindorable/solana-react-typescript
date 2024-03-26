@@ -52,6 +52,16 @@ const Arconnect = () => {
     console.log("Disconnected!");
   };
 
+  // Ellipsis for MUI Button.
+  const ellipsisButtonSX = {
+    width: "100%",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textAlign: "center",
+    display: "block",
+  };
+
   return (
     <>
       <Box>
@@ -71,14 +81,14 @@ const Arconnect = () => {
           <Typography variant="body2">Connect Wallet (ArConnect)</Typography>
         </Divider>
 
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={connectWallet}>
+            <Button variant="contained" color="primary" onClick={connectWallet} sx={ellipsisButtonSX}>
               {valueConnectLabel}
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={disconnetWallet}>
+            <Button variant="contained" color="primary" onClick={disconnetWallet} sx={ellipsisButtonSX}>
               Disconnect
             </Button>
           </Grid>
