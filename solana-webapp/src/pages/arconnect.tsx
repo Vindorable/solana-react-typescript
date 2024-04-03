@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 
 import ArweaveClusterSelect from "../components/arweave-wallet/arweave-cluster-select";
+import { ArweaveClusterContext } from '../providers/arweave-cluster';
 
 
 // ---------------------------------------------------------
 
 const Arconnect = () => {
+  const { arweave, changeArweaveCluster } = useContext(ArweaveClusterContext);
   const [valueConnectLabel, setConnectLabel] = useState("...");
 
   useEffect(() => {
@@ -50,6 +52,22 @@ const Arconnect = () => {
 
     await updateConnectLabel();
     console.log("Disconnected!");
+  };
+
+  const getBalance = async () => {
+    const address = await window.arweaveWallet.getActiveAddress();
+    const balance = await arweave.wallets.getBalance(address);
+    const ar = arweave.ar.winstonToAr(balance);
+
+    console.log(balance, "Winston");
+    console.log(ar, "AR");
+  };
+
+  const airdrop = async () => {
+    const address = await window.arweaveWallet.getActiveAddress();
+    // 100 AR = 100000000000000 Winston
+    const response = await arweave.api.get("mint/" + address + "/100000000000000");
+    console.log(response);
   };
 
   // Ellipsis for MUI Button.
@@ -108,6 +126,25 @@ const Arconnect = () => {
             <Typography variant="caption">
               &nbsp;Start ArConnect &gt; Settings &gt; Gateway &gt; select Gateway
             </Typography>
+          </Grid>
+        </Grid>
+
+        {/* ---------- */}
+
+        <Divider textAlign="left" sx={{ mt: 2, mb: 2 }}>
+          <Typography variant="body2">Other Functions</Typography>
+        </Divider>
+
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Button variant="contained" color="primary" onClick={getBalance}>
+              Get Balance
+            </Button>
+          </Grid>
+          <Grid item xs={3}>
+            <Button variant="contained" color="primary" onClick={airdrop}>
+              Airdrop
+            </Button>
           </Grid>
         </Grid>
       </Box>
